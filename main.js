@@ -1458,3 +1458,16 @@ window.onresize = function(e) {
     printResizeText()
 },
 $(window).on("orientationchange", orientationChangeHandler);
+// ========================补丁代码在末尾追加=========================
+
+// 修复移动端 input/textarea 在全局 touch 监听场景下不能弹出输入法的问题
+$('#email-address, #email-subject, #email-message').on('touchstart touchmove touchend', function(e) {
+    e.stopPropagation();
+    // 不要 preventDefault，否则输入法弹窗会被禁止
+});
+$('#email-address, #email-subject, #email-message').on('focus', function(e) {
+    setTimeout(() => {
+        window.scrollTo(0, $(this).offset().top - 10);
+    }, 300);
+});
+// ========================补丁代码结束=========================
