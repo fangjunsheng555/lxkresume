@@ -1313,21 +1313,34 @@
   <source src="supertizzyt.mp3" type="audio/mp3">
 </audio>
 
- <script>
-// 步骤1：解决浏览器自动播放限制，监听一次交互后解锁音频
-document.addEventListener('touchstart', unlockNbaAudio, {once: true});
-document.addEventListener('click', unlockNbaAudio, {once: true});
-function unlockNbaAudio() {
-    var nbaAudio = document.getElementById('nba-music');
-    if (nbaAudio) {
-        nbaAudio.play().then(() => {
-            nbaAudio.pause();
-            nbaAudio.currentTime = 0;
+<script>
+/* 只复制下面整段到你页面同样位置 */
+
+document.addEventListener('touchstart', unlockBgAudio, {once: true});
+document.addEventListener('click', unlockBgAudio, {once: true});
+function unlockBgAudio() {
+    var bgAudio = document.getElementById('background-music');
+    if (bgAudio) {
+        bgAudio.play().then(() => {
+            bgAudio.pause();
+            bgAudio.currentTime = 0;
         }).catch(()=>{});
     }
 }
 
-// 步骤2：检测robby进入nba区域，切换音乐
+var audio = document.getElementById('background-music');
+function tryPlayMusic() {
+  if (audio.paused) {
+    audio.play().catch(function(err){
+      console.log('播放失败，请重新点击');
+    });
+  } else {
+    audio.pause();
+  }
+}
+document.getElementById('robby-container').addEventListener('click', tryPlayMusic);
+document.getElementById('robby-container').addEventListener('touchstart', tryPlayMusic);
+
 var robby = document.getElementById('robby-container');
 var nba = document.getElementById('nba-container');
 var nbaAudio = document.getElementById('nba-music');
@@ -1365,6 +1378,10 @@ function checkRobbyToNba() {
     }
 }
 setInterval(checkRobbyToNba, 50);
+
+document.addEventListener('WeixinJSBridgeReady', function () {
+    audio.play();
+}, false);
 </script>
 
 </body>
