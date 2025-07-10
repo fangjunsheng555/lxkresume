@@ -1314,6 +1314,23 @@
 </audio>
 
 <script>
+// NBA音乐权限静默解锁（关键一步！）
+function unlockNbaAudio() {
+    var nbaAudio = document.getElementById('nba-music');
+    if (!nbaAudio) return;
+    nbaAudio.play().then(function() {
+        nbaAudio.pause();
+        nbaAudio.currentTime = 0;
+    }).catch(function(){});
+    // 解锁后移除监听器
+    document.removeEventListener('touchstart', unlockNbaAudio, true);
+    document.removeEventListener('click', unlockNbaAudio, true);
+}
+// 用户第一次任意触摸或点击时解锁
+document.addEventListener('touchstart', unlockNbaAudio, true);
+document.addEventListener('click', unlockNbaAudio, true);
+
+// 原有音乐切换逻辑（注意变量要重新声明，不能留在外面）
 var robby = document.getElementById('robby-container');
 var nba = document.getElementById('nba-container');
 var nbaAudio = document.getElementById('nba-music');
@@ -1336,7 +1353,7 @@ function checkRobbyToNba() {
             bgWasPlaying = !bgAudio.paused; // 进入前starboy是否在播
             bgAudio.pause();                // 暂停starboy
             nbaAudio.currentTime = 0;
-            nbaAudio.play().catch(()=>{});
+            nbaAudio.play().catch(function(){});
             nbaIsPlaying = true;
         }
     } else {
@@ -1345,12 +1362,13 @@ function checkRobbyToNba() {
             nbaAudio.currentTime = 0;
             nbaIsPlaying = false;
             if (bgWasPlaying) {           // 如果进nba前starboy在播，则自动恢复
-                bgAudio.play().catch(()=>{});
+                bgAudio.play().catch(function(){});
             }
         }
     }
 }
 setInterval(checkRobbyToNba, 50);
+
 </script>
 
 
