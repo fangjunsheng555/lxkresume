@@ -186,21 +186,21 @@
       <div class="nba-board-blue" id="nba-board-1" style="bottom: 0px;">
        <div class="nba-text-container">
         <div class="nba-text">
-         N
+         R
         </div>
        </div>
       </div>
       <div class="nba-board-blue" id="nba-board-2" style="bottom: 0px;">
        <div class="nba-text-container">
         <div class="nba-text">
-         B
+         A
         </div>
        </div>
       </div>
       <div class="nba-board-blue" id="nba-board-3" style="bottom: 0px;">
        <div class="nba-text-container">
         <div class="nba-text">
-         A
+         P
         </div>
        </div>
       </div>
@@ -236,7 +236,7 @@
        <div class="ribbon-relative">
         <div class="ribbon-left"></div>
         <div class="ribbon-middle">
-         Sports Fan
+         TizzyT's Fan
         </div>
         <div class="ribbon-right"></div>
        </div>
@@ -483,28 +483,28 @@
         <div class="sea-ribbon-container" id="crab-ribbon-container-1">
          <div class="sea-ribbon-left"></div>
          <div class="sea-ribbon-middle">
-          放🕊️
+          STUDY
          </div>
          <div class="sea-ribbon-right"></div>
         </div>
         <div class="sea-ribbon-container" id="crab-ribbon-container-2">
          <div class="sea-ribbon-left"></div>
          <div class="sea-ribbon-middle">
-          LAZY SLEEP
+          READ
          </div>
          <div class="sea-ribbon-right"></div>
         </div>
         <div class="sea-ribbon-container" id="crab-ribbon-container-3">
          <div class="sea-ribbon-left"></div>
          <div class="sea-ribbon-middle">
-          EAT DELICACIES
+          SPORT
          </div>
          <div class="sea-ribbon-right"></div>
         </div>
         <div class="sea-ribbon-container" id="crab-ribbon-container-4">
          <div class="sea-ribbon-left"></div>
          <div class="sea-ribbon-middle">
-          GET DRUNK
+          EAT DELICACIES
          </div>
          <div class="sea-ribbon-right"></div>
         </div>
@@ -753,7 +753,7 @@
         LS（LIFE）
        </div>
        <div class="experience-text-c">
-        Always where there’s good food and a chance to sleep in
+        I spend my spare time reading and studying
        </div>
       </div>
       <div id="squid" style="left: 1000px;">
@@ -770,19 +770,19 @@
         <div class="piechart-back"></div>
         <div id="piechart-incognito-front" style="opacity: 0;"></div>
         <div class="piechart-text-a" id="piechart-incognito-text-graphic-1" style="opacity: 0;">
-         Laziness
+         Smart
         </div>
         <div class="piechart-text-b" id="piechart-incognito-text-graphic-2" style="opacity: 0;">
          15%
         </div>
         <div class="piechart-text-c" id="piechart-incognito-text-animation-1" style="opacity: 0;">
-         Talent
+         Studious
         </div>
         <div class="piechart-text-d" id="piechart-incognito-text-animation-2" style="opacity: 0;">
          70%
         </div>
         <div class="piechart-text-a" id="piechart-incognito-text-code-1" style="opacity: 0;">
-         Freedom
+         Free
         </div>
         <div class="piechart-text-b" id="piechart-incognito-text-code-2" style="opacity: 0;">
          15%
@@ -1307,6 +1307,65 @@
    <div id="tip-arrow-bottom" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png&quot;);"></div>
    <div id="tip-arrow-top" style="background: url(&quot;chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png&quot;);"></div>
   </div>
- 
+
+
+<audio id="nba-music" loop>
+  <source src="supertizzyt.mp3" type="audio/mp3">
+</audio>
+
+ <script>
+// 步骤1：解决浏览器自动播放限制，监听一次交互后解锁音频
+document.addEventListener('touchstart', unlockNbaAudio, {once: true});
+document.addEventListener('click', unlockNbaAudio, {once: true});
+function unlockNbaAudio() {
+    var nbaAudio = document.getElementById('nba-music');
+    if (nbaAudio) {
+        nbaAudio.play().then(() => {
+            nbaAudio.pause();
+            nbaAudio.currentTime = 0;
+        }).catch(()=>{});
+    }
+}
+
+// 步骤2：检测robby进入nba区域，切换音乐
+var robby = document.getElementById('robby-container');
+var nba = document.getElementById('nba-container');
+var nbaAudio = document.getElementById('nba-music');
+var bgAudio = document.getElementById('background-music');
+var nbaIsPlaying = false;
+var bgWasPlaying = false;
+
+function checkRobbyToNba() {
+    if (!robby || !nba) return;
+    var robbyRect = robby.getBoundingClientRect();
+    var nbaRect = nba.getBoundingClientRect();
+    var isNear = (
+        robbyRect.right > nbaRect.left &&
+        robbyRect.left < nbaRect.right &&
+        robbyRect.bottom > nbaRect.top &&
+        robbyRect.top < nbaRect.bottom
+    );
+    if (isNear) {
+        if (!nbaIsPlaying) {
+            bgWasPlaying = !bgAudio.paused;
+            bgAudio.pause();
+            nbaAudio.currentTime = 0;
+            nbaAudio.play().catch(()=>{});
+            nbaIsPlaying = true;
+        }
+    } else {
+        if (nbaIsPlaying) {
+            nbaAudio.pause();
+            nbaAudio.currentTime = 0;
+            nbaIsPlaying = false;
+            if (bgWasPlaying) {
+                bgAudio.play().catch(()=>{});
+            }
+        }
+    }
+}
+setInterval(checkRobbyToNba, 50);
+</script>
+
 </body>
 </html>
