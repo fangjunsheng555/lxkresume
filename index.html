@@ -1314,19 +1314,11 @@
 </audio>
 
 <script>
-// NBA音乐权限静默解锁（建议加静音，最大兼容！）
+// 只用 .load() 静默解锁NBA音乐
 function unlockNbaAudio() {
     var nbaAudio = document.getElementById('nba-music');
     if (!nbaAudio) return;
-    var oldVolume = nbaAudio.volume;
-    nbaAudio.volume = 0;
-    nbaAudio.play().then(function() {
-        nbaAudio.pause();
-        nbaAudio.currentTime = 0;
-        nbaAudio.volume = oldVolume;
-    }).catch(function(){
-        nbaAudio.volume = oldVolume;
-    });
+    nbaAudio.load(); // 只load，不play，绝对不会自动播
     document.removeEventListener('touchstart', unlockNbaAudio, true);
     document.removeEventListener('click', unlockNbaAudio, true);
 }
@@ -1353,8 +1345,8 @@ function checkRobbyToNba() {
     );
     if (isNear) {
         if (!nbaIsPlaying) {
-            bgWasPlaying = !bgAudio.paused; // 进入前starboy是否在播
-            bgAudio.pause();                // 暂停starboy
+            bgWasPlaying = !bgAudio.paused;
+            bgAudio.pause();
             nbaAudio.currentTime = 0;
             nbaAudio.play().catch(function(){});
             nbaIsPlaying = true;
@@ -1364,13 +1356,14 @@ function checkRobbyToNba() {
             nbaAudio.pause();
             nbaAudio.currentTime = 0;
             nbaIsPlaying = false;
-            if (bgWasPlaying) {           // 如果进nba前starboy在播，则自动恢复
+            if (bgWasPlaying) {
                 bgAudio.play().catch(function(){});
             }
         }
     }
 }
 setInterval(checkRobbyToNba, 50);
+
 
 </script>
 
