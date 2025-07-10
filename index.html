@@ -1314,23 +1314,26 @@
 </audio>
 
 <script>
-// NBA音乐权限静默解锁（关键一步！）
+// NBA音乐权限静默解锁（建议加静音，最大兼容！）
 function unlockNbaAudio() {
     var nbaAudio = document.getElementById('nba-music');
     if (!nbaAudio) return;
+    var oldVolume = nbaAudio.volume;
+    nbaAudio.volume = 0;
     nbaAudio.play().then(function() {
         nbaAudio.pause();
         nbaAudio.currentTime = 0;
-    }).catch(function(){});
-    // 解锁后移除监听器
+        nbaAudio.volume = oldVolume;
+    }).catch(function(){
+        nbaAudio.volume = oldVolume;
+    });
     document.removeEventListener('touchstart', unlockNbaAudio, true);
     document.removeEventListener('click', unlockNbaAudio, true);
 }
-// 用户第一次任意触摸或点击时解锁
 document.addEventListener('touchstart', unlockNbaAudio, true);
 document.addEventListener('click', unlockNbaAudio, true);
 
-// 原有音乐切换逻辑（注意变量要重新声明，不能留在外面）
+// 原有音乐切换逻辑
 var robby = document.getElementById('robby-container');
 var nba = document.getElementById('nba-container');
 var nbaAudio = document.getElementById('nba-music');
