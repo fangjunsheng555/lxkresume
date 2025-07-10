@@ -1313,34 +1313,7 @@
   <source src="supertizzyt.mp3" type="audio/mp3">
 </audio>
 
-<script>
-/* 只复制下面整段到你页面同样位置 */
-
-document.addEventListener('touchstart', unlockBgAudio, {once: true});
-document.addEventListener('click', unlockBgAudio, {once: true});
-function unlockBgAudio() {
-    var bgAudio = document.getElementById('background-music');
-    if (bgAudio) {
-        bgAudio.play().then(() => {
-            bgAudio.pause();
-            bgAudio.currentTime = 0;
-        }).catch(()=>{});
-    }
-}
-
-var audio = document.getElementById('background-music');
-function tryPlayMusic() {
-  if (audio.paused) {
-    audio.play().catch(function(err){
-      console.log('播放失败，请重新点击');
-    });
-  } else {
-    audio.pause();
-  }
-}
-document.getElementById('robby-container').addEventListener('click', tryPlayMusic);
-document.getElementById('robby-container').addEventListener('touchstart', tryPlayMusic);
-
+// --- NBA区域自动音乐切换 ---
 var robby = document.getElementById('robby-container');
 var nba = document.getElementById('nba-container');
 var nbaAudio = document.getElementById('nba-music');
@@ -1360,8 +1333,8 @@ function checkRobbyToNba() {
     );
     if (isNear) {
         if (!nbaIsPlaying) {
-            bgWasPlaying = !bgAudio.paused;
-            bgAudio.pause();
+            bgWasPlaying = !bgAudio.paused; // 进入前starboy是否在播
+            bgAudio.pause();                // 暂停starboy
             nbaAudio.currentTime = 0;
             nbaAudio.play().catch(()=>{});
             nbaIsPlaying = true;
@@ -1371,7 +1344,7 @@ function checkRobbyToNba() {
             nbaAudio.pause();
             nbaAudio.currentTime = 0;
             nbaIsPlaying = false;
-            if (bgWasPlaying) {
+            if (bgWasPlaying) {           // 如果进nba前starboy在播，则自动恢复
                 bgAudio.play().catch(()=>{});
             }
         }
@@ -1379,10 +1352,6 @@ function checkRobbyToNba() {
 }
 setInterval(checkRobbyToNba, 50);
 
-document.addEventListener('WeixinJSBridgeReady', function () {
-    audio.play();
-}, false);
-</script>
 
 </body>
 </html>
